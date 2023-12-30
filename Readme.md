@@ -1,4 +1,4 @@
-# Professional Quality Boilerplate Code
+# Professional Quality Boilerplate Code (Module syntax used)
 
 This repository contains a professional quality boilerplate code that is designed to help you kickstart your projects. It includes a variety of packages, middlewares, and utility functions that are commonly used in software development.
 
