@@ -1,31 +1,37 @@
-# Professional Quality Boilerplate Code (Module syntax used)
+# VideoZilla
 
-This repository contains a professional quality boilerplate code that is designed to help you kickstart your projects. It includes a variety of packages, middlewares, and utility functions that are commonly used in software development.
+VideoZilla is a robust and feature-rich platform that serves as a clone of YouTube. It is designed to provide users with a similar experience, offering a wide range of video content across various categories.
 
-## Packages Included
+## Features
 
-Here are some of the packages included in this boilerplate:
+- **Video Streaming**: Stream videos seamlessly, with an interface designed for easy navigation.
+- **User Accounts**: Create your own account, upload videos, and curate your own playlists.
+- **Commenting System**: Engage with other users through comments.
+- **Like and Dislike System**: Express your opinions on videos with a like or dislike.
+- **Search Functionality**: Find your favorite videos with our efficient search system.
 
-- **Express**: A fast, unopinionated, and flexible Node.js web application framework.
-- **Mongoose**: An elegant MongoDB object modeling for Node.js.
-- **Cors**: A package for providing a Connect/Express middleware that can be used to enable CORS with various options.
-- **Dotenv**: A zero-dependency module that loads environment variables from a `.env` file into `process.env`.
-- **Nodemon**: A utility that will monitor for any changes in your source and automatically restart your server.
+## Tech Stack
 
-## Middlewares Used
+VideoZilla is built with the following technologies:
 
-The boilerplate includes the following middlewares:
+- **Frontend**: Next.js
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
 
-- **Error Handling Middleware**: To handle all the errors that occur in the application.
-- **Request Logging Middleware**: To log every request made to the server.
-- **Authentication Middleware**: To authenticate the routes.
+## Installation
 
-## Utility Functions
+To get VideoZilla running on your local machine, follow these steps:
 
-The boilerplate also includes a variety of utility functions that are commonly used in software development:
+1. Clone the repository
+2. Install the dependencies with `npm install`
+3. Start the server with `npm start`
 
-- **Api Error Handler**: A utility function handle errors.
-- **Api Response Handler**: A utility function handle Responses.
-- **Async Handler**: A utility function handle async request.
+Please note that you will need to have Node.js and npm installed on your machine.
 
-Please refer to the individual files and folders for more detailed information about how these packages, middlewares, and utility functions are used.
+## Contributing
+
+We welcome contributions to VideoZilla. If you have a feature request, bug report, or proposal for improvement, please open an issue on this repository.
+
+## License
+
+VideoZilla is licensed under the MIT License. See `LICENSE` for more information.
