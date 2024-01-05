@@ -13,12 +13,22 @@ const uploadOnCloudinary = async (filePath) => {
     const response = await cloudinary.uploader.upload(filePath, {
       resource_type: "auto",
     });
-    console.log(`File uploaded successfully. ${response.url}`);
+    fs.unlinkSync(filePath); //remove temp file
     return response;
   } catch (error) {
-    fs.unlinkSync(filePath); //remove temp file
+    fs.unlinkSync(filePath);
     return null;
   }
 };
 
-export { uploadOnCloudinary };
+const deleteFromCloudinary = async (publicId) => {
+  try {
+    if (!publicId) return null;
+    const response = await cloudinary.uploader.destroy(publicId);
+    return response;
+  } catch (error) {
+    return null;
+  }
+}
+
+export { uploadOnCloudinary , deleteFromCloudinary };

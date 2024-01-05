@@ -4,7 +4,7 @@ import { app } from "./app.js";
 import { PORT } from "./constants.js";
 
 dotenv.config({
-  path: "./env",
+  path: "./.env",
 });
 
 connectDB()

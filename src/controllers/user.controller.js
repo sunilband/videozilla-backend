@@ -1,8 +1,15 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
-import {ApiResponse} from "../utils/ApiResponse.js";
-import { bodyDataExists, emailIsValid } from "../utils/validation/bodyData.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import {
+  bodyDataExists,
+  emailIsValid,
+  passwordIsValid,
+} from "../utils/validation/bodyData.js";
+import {
+  uploadOnCloudinary,
+  deleteFromCloudinary,
+} from "../utils/cloudinary.js";
 import { User } from "../models/user.model.js";
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -17,6 +24,14 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please provide a valid email");
   }
 
+  // checking if the password is valid
+  if (!passwordIsValid(password)) {
+    throw new ApiError(
+      400,
+      "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number"
+    );
+  }
+
   // Check if existing user
   const existingUser = await User.findOne({
     $or: [{ email }, { username }],
@@ -26,8 +41,17 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "Email or Username already exists");
   }
 
-  const avatarLocalPath = req.file?.avatar[0]?.path;
-  const coverImageLocalPath = req.file?.coverImage[0]?.path;
+
+
+  let avatarLocalPath = "";
+  let coverImageLocalPath = "";
+  
+  if(req.files?.avatar && req.files?.avatar[0]) {
+    avatarLocalPath = req.files?.avatar[0]?.path;
+  }
+  if(req.files?.coverImage && req.files?.coverImage[0]) {
+    coverImageLocalPath = req.files?.coverImage[0]?.path;
+  }
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar is required");
@@ -42,7 +66,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // create new user
-  const newUser = new User({
+  const newUser = await User.create({
     fullName,
     email,
     password,
@@ -52,18 +76,19 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   // check if user was created and deselect password and refreshToken
- const createdUser =await User.findById({
+  const createdUser = await User.findById({
     _id: newUser._id,
   }).select("-password -refreshToken");
 
   if (!createdUser) {
+    await deleteFromCloudinary(avatar.public_id);
+    await deleteFromCloudinary(coverImage.public_id);
     throw new ApiError(500, "User creation failed");
   }
- 
 
-  res.status(200).json(
-    new ApiResponse(200,createdUser, "User created successfully")
-  );
+  res
+    .status(200)
+    .json(new ApiResponse(200, createdUser, "User created successfully"));
 });
 
 export { registerUser };

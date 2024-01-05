@@ -8,4 +8,10 @@ const emailIsValid = (email) => {
   return regEx.test(email);
 };
 
-export {bodyDataExists,emailIsValid}
+// Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number
+const passwordIsValid = (password) => {
+  const regEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
+  return regEx.test(password);
+}
+
+export {bodyDataExists,emailIsValid,passwordIsValid}
