@@ -1,2 +1,4 @@
-export const DB_NAME = "example"
-export const PORT = process.env.PORT || 8000;
+const DB_NAME = "sunil";
+const PORT = process.env.PORT || 8000;
+
+export { DB_NAME, PORT };
