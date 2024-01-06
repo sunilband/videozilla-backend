@@ -94,6 +94,7 @@ userSchema.methods.generateAuthToken = async function () {
   );
   return token;
 };
+
 // custom method to generate refreshToken
 userSchema.methods.generateRefreshToken = async function () {
   const token = await jwt.sign(
@@ -105,5 +106,6 @@ userSchema.methods.generateRefreshToken = async function () {
   );
   return token;
 };
+
 
 export const User = mongoose.model("User", userSchema);
