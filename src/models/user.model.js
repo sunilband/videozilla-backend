@@ -80,6 +80,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.ispasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
+
 // custom method to generate authToken
 userSchema.methods.generateAuthToken = async function () {
   const token = await jwt.sign(

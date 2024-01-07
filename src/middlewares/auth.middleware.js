@@ -5,15 +5,24 @@ import { User } from "../models/user.model.js";
 
 const verifyJWT = asyncHandler(async (req, res, next) => {
   try {
-    const token =
+    const accessToken =
       req?.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
-    if (!token) {
+
+    const refreshToken =
+      req?.cookies?.refreshToken ||
+      req.header("x-refresh-token")?.replace("Bearer ", "") || req.body.refreshToken;
+    if (!(accessToken || refreshToken)) {
       throw new ApiError(401, "Middleware: No token, authorization denied");
     }
 
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    const user = await User.findById(decoded?._id).select(
+    const {_id} = accessToken?jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET):jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+    if (!_id) {
+      throw new ApiError(401, "Middleware: Invalid token");
+    }
+
+    const user = await User.findById(_id).select(
       "-password -refreshToken"
     );
 
