@@ -5,4 +5,4 @@ const cookieOptions = {
   secure: true,
 };
 
-export { DB_NAME, PORT ,cookieOptions};
+export { DB_NAME, PORT, cookieOptions };

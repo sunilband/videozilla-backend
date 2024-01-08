@@ -1,7 +1,9 @@
-const bodyDataExists = (...fields)=>{
-    const res = [...fields].includes(undefined) || [...fields].some((item) => item.trim() === "");
-    return res;
-  }
+const bodyDataExists = (...fields) => {
+  const res =
+    [...fields].includes(undefined) ||
+    [...fields].some((item) => item.trim() === "");
+  return res;
+};
 
 const emailIsValid = (email) => {
   const regEx = /\S+@\S+\.\S+/;
@@ -12,6 +14,6 @@ const emailIsValid = (email) => {
 const passwordIsValid = (password) => {
   const regEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
   return regEx.test(password);
-}
+};
 
-export {bodyDataExists,emailIsValid,passwordIsValid}
+export { bodyDataExists, emailIsValid, passwordIsValid };

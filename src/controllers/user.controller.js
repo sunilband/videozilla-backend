@@ -164,34 +164,32 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
+  const user = req.user;
+  let { refreshToken } = req.body;
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
 
-    const user = req.user;
-    let { refreshToken } = req.body;
-    if (!user) {
-      throw new ApiError(404, "User not found");
-    }
+  if (user?.refreshToken !== refreshToken) {
+    throw new ApiError(401, "Refresh Token Expired or Invalid");
+  }
 
-    if (user?.refreshToken !== refreshToken) {
-      throw new ApiError(401, "Refresh Token Expired or Invalid");
-    }
+  const newTokens = await generateAuthAndRefreshTokens(user._id, user);
 
-    const newTokens = await generateAuthAndRefreshTokens(user._id, user);
+  const authToken = newTokens.accessToken;
+  refreshToken = newTokens.refreshToken;
 
-    const authToken = newTokens.accessToken;
-    refreshToken = newTokens.refreshToken;
-
-    res
-      .status(200)
-      .cookie("accessToken", authToken, cookieOptions)
-      .cookie("refreshToken", refreshToken, cookieOptions)
-      .json(
-        new ApiResponse(
-          200,
-          { user, authToken, refreshToken },
-          "Access token refreshed successfully"
-        )
-      );
-
+  res
+    .status(200)
+    .cookie("accessToken", authToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
+    .json(
+      new ApiResponse(
+        200,
+        { user, authToken, refreshToken },
+        "Access token refreshed successfully"
+      )
+    );
 });
 
 export { registerUser, loginUser, logoutUser, refreshAccessToken };

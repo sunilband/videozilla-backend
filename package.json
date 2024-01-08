@@ -5,7 +5,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js" 
+    "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "keywords": [
     "javascript",
@@ -15,6 +19,7 @@
   "author": "Sunil Band",
   "license": "ISC",
   "devDependencies": {
+    "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "nodemon": "^3.0.1",
     "prettier": "3.1.1"

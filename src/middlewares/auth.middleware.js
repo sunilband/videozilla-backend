@@ -11,20 +11,21 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
 
     const refreshToken =
       req?.cookies?.refreshToken ||
-      req.header("x-refresh-token")?.replace("Bearer ", "") || req.body.refreshToken;
+      req.header("x-refresh-token")?.replace("Bearer ", "") ||
+      req.body.refreshToken;
     if (!(accessToken || refreshToken)) {
       throw new ApiError(401, "Middleware: No token, authorization denied");
     }
 
-    const {_id} = accessToken?jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET):jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const { _id } = accessToken
+      ? jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
+      : jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
     if (!_id) {
       throw new ApiError(401, "Middleware: Invalid token");
     }
 
-    const user = await User.findById(_id).select(
-      "-password -refreshToken"
-    );
+    const user = await User.findById(_id).select("-password -refreshToken");
 
     if (!user) {
       throw new ApiError(401, "Middleware: User not found");
