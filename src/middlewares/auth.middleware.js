@@ -9,17 +9,11 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
       req?.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
 
-    const refreshToken =
-      req?.cookies?.refreshToken ||
-      req.header("x-refresh-token")?.replace("Bearer ", "") ||
-      req.body.refreshToken;
-    if (!(accessToken || refreshToken)) {
-      throw new ApiError(401, "Middleware: No token, authorization denied");
+    if (!accessToken) {
+      throw new ApiError(401, "Middleware: Invalid token");
     }
 
-    const { _id } = accessToken
-      ? jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
-      : jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const { _id } = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
 
     if (!_id) {
       throw new ApiError(401, "Middleware: Invalid token");

@@ -5,4 +5,8 @@ const cookieOptions = {
   secure: true,
 };
 
-export { DB_NAME, PORT, cookieOptions };
+// rate limiting
+const maxRequests = 2;
+const timeWindow = 10;
+
+export { DB_NAME, PORT, cookieOptions, maxRequests, timeWindow };

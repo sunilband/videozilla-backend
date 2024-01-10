@@ -11,8 +11,8 @@ import {
   deleteFromCloudinary,
 } from "../utils/services/cloudinary.js";
 import { User } from "../models/user.model.js";
-import jwt from "jsonwebtoken";
 import { cookieOptions } from "../constants.js";
+import jwt from "jsonwebtoken";
 
 const generateAuthAndRefreshTokens = async (_id, user) => {
   try {
@@ -164,8 +164,17 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const user = req.user;
-  let { refreshToken } = req.body;
+  let { refreshToken } = req.cookies || req.body;
+
+  if (!refreshToken) {
+    throw new ApiError(401, "Refresh Token Expired or Invalid");
+  }
+  const { _id } = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  if (!_id) {
+    throw new ApiError(401, "Refresh Token Expired or Invalid");
+  }
+
+  const user = await User.findById(_id);
   if (!user) {
     throw new ApiError(404, "User not found");
   }
