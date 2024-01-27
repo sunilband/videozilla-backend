@@ -12,7 +12,9 @@ const emailIsValid = (email) => {
 
 // Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number
 const passwordIsValid = (password) => {
-  const regEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
+  // Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number and optionally one special character
+  const regEx =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
   return regEx.test(password);
 };
 

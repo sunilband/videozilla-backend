@@ -201,4 +201,46 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+const changeUserpassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const { _id } = req.user;
+
+  if (bodyDataExists(oldPassword, newPassword)) {
+    throw new ApiError(400, "Please provide all the required fields");
+  }
+
+  if (!passwordIsValid(newPassword)) {
+    throw new ApiError(
+      400,
+      "New Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter , one number and one special character"
+    );
+  }
+
+  if (oldPassword === newPassword) {
+    throw new ApiError(400, "New Password cannot be same as old password");
+  }
+
+  const user = await User.findById(_id).select("+password");
+
+  const isPasswordCorrect = await user.ispasswordCorrect(oldPassword);
+  if (!isPasswordCorrect) {
+    throw new ApiError(401, "Invalid credentials");
+  }
+
+  user.password = newPassword; //hashing is done in pre save hook
+  await user.save({
+    validateBeforeSave: false, // we are not validating the other things here
+  });
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, null, "Password changed successfully"));
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  changeUserpassword,
+};

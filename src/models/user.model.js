@@ -53,11 +53,14 @@ const userSchema = new Schema(
       minlength: 6,
       validate: {
         validator: function (v) {
-          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(v);
+          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(
+            v
+          );
         },
         message: (props) =>
-          `Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number`,
+          `Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter , one number and one special character`,
       },
+      select: false, // password will not be returned in query results
     },
     refreshToken: {
       type: String,
